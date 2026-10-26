@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Command Center</title>
+    <link rel="stylesheet" href="styles.css?v=2">
+    <script>
+        // Apply the saved theme before the page draws, so dark mode doesn't flash white on load
+        try {
+            const choice = localStorage.getItem('commandCenter.theme') || 'system';
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.dataset.theme =
+                choice === 'dark' || (choice === 'system' && prefersDark) ? 'dark' : 'light';
+        } catch {}
+    </script>
+</head>
+<body>
+
+    <nav class="sidebar" id="sidebar">
+        <button class="toggle-btn" id="toggle-sidebar">☰</button>
+        <ul class="nav-links">
+            <li><button class="nav-btn active" data-target="dashboard-page"><span>🏠</span> <span>Dashboard</span></button></li>
+            <li><button class="nav-btn" data-target="task-page"><span>📝</span> <span>Task Manager</span></button></li>
+            <li><button class="nav-btn" data-target="calendar-page"><span>📅</span> <span>Calendar</span></button></li>
+            <li><button class="nav-btn" data-target="settings-page"><span>⚙️</span> <span>Settings</span></button></li>
+        </ul>
+    </nav>
+
+    <main class="content-container">
+
+        <section id="dashboard-page" class="app-page active-page">
+            <header class="dashboard-header">
+                <h1><span id="dynamic-greeting"></span>, <button type="button" id="user-name-btn" class="user-name" title="Click to change your name"></button><input type="text" id="user-name-input" class="user-name-input" maxlength="40" aria-label="Your name" hidden>!</h1>
+                <p id="day-summary"></p>
+            </header>
+
+            <div class="dashboard-grid">
+                <div class="widget clock-widget">
+                    <div id="digital-clock">12:00:00 AM</div>
+                </div>
+
+                <div class="widget weather-widget">
+                    <h3 id="weather-city">St. Louis, MO</h3>
+                    <div id="weather-icon">⏳</div>
+                    <div id="weather-temp">--°F</div>
+                    <div id="weather-condition">Loading weather...</div>
+                    <div class="weather-options">
+                        <button id="weather-hourly-btn" class="active">Hourly</button>
+                        <button id="weather-daily-btn">Daily</button>
+                    </div>
+                    <ul id="weather-forecast" class="weather-forecast"></ul>
+                    <div class="weather-footer">
+                        <span id="weather-updated"></span>
+                        <button id="refresh-weather-btn">Refresh</button>
+                    </div>
+                </div>
+
+                <div class="widget timer-widget">
+                    <h3>Focus Timer</h3>
+                    <div class="timer-modes">
+                        <button class="mode-btn active" data-time="1500">Focus (25m)</button>
+                        <button class="mode-btn" data-time="300">Break (5m)</button>
+                        <button class="mode-btn" data-time="900">Longer Break (15m)</button>
+                    </div>
+                    <div class="timer-custom">
+                        <label for="custom-minutes">Custom:</label>
+                        <input type="number" id="custom-minutes" min="0.1" max="999" step="any" placeholder="45">
+                        <span>min</span>
+                        <button id="set-custom-timer">Set</button>
+                    </div>
+                    <div id="timer-display">25:00</div>
+                    <div class="timer-controls">
+                        <button id="start-timer">Start</button>
+                        <button id="pause-timer">Pause</button>
+                        <button id="stop-timer">Stop</button>
+                    </div>
+                </div>
+
+                <div class="widget notepad-widget">
+                    <h3>Quick Notes</h3>
+                    <input type="text" id="note-title" placeholder="Note Title...">
+                    <textarea id="notepad-area" placeholder="Take notes here..."></textarea>
+                    <div class="notepad-controls">
+                        <button id="export-doc">Export to Word</button>
+                        <button id="export-pdf">Export as PDF</button>
+                    </div>
+                    <span id="note-status" class="note-status"></span>
+                </div>
+            </div>
+        </section>
+
+        <section id="task-page" class="app-page">
+            <h2>Task & Habit Manager</h2>
+            
+            <div class="task-input-container">
+                <input type="text" id="new-task-input" placeholder="Add a new task...">
+                <select id="task-priority">
+                    <option value="low">Low Priority</option>
+                    <option value="medium">Medium Priority</option>
+                    <option value="high">High Priority</option>
+                </select>
+                <input type="date" id="task-due" title="Due date (optional)">
+                <button id="add-task-btn">+ Add Task</button>
+            </div>
+
+            <div class="task-sort-row">
+                <label for="task-sort">Sort by</label>
+                <select id="task-sort">
+                    <option value="priority">Priority</option>
+                    <option value="dueDate">Due date</option>
+                </select>
+            </div>
+
+            <div class="todo-grid-container">
+                <ul id="todo-list"></ul>
+                <p id="todo-empty" class="empty-state">No tasks yet. Add one above to get started.</p>
+            </div>
+
+            <div class="habit-tracker-container">
+                <h3>Habit Tracker</h3>
+                <div class="task-input-container habit-input-container">
+                    <input type="text" id="new-habit-input" placeholder="Add a new habit...">
+                    <button id="add-habit-btn">+ Add Habit</button>
+                </div>
+                <div id="habit-list"></div>
+                <p id="habit-empty" class="empty-state">No habits yet. Add one above and tick off the days you do it.</p>
+            </div>
+        </section>
+
+        <section id="calendar-page" class="app-page">
+            <header class="calendar-header">
+                <div class="calendar-nav">
+                    <button id="today-btn">Today</button>
+                    <button id="prev-period" title="Previous">&lt;</button>
+                    <button id="next-period" title="Next">&gt;</button>
+                </div>
+                <h2 id="calendar-title"></h2>
+                <div class="view-switcher">
+                    <button class="view-btn" data-view="day">Day</button>
+                    <button class="view-btn" data-view="week">Week</button>
+                    <button class="view-btn" data-view="month">Month</button>
+                </div>
+            </header>
+
+            <div id="calendar-view" class="calendar-view"></div>
+
+            <div id="event-modal" class="modal hidden">
+                <div class="modal-content">
+
+                    <!-- Everything on one day -->
+                    <div id="day-panel">
+                        <h3 id="day-panel-title"></h3>
+                        <ul id="modal-event-list"></ul>
+                        <div class="modal-actions">
+                            <button class="modal-close-btn">Close</button>
+                            <button id="new-event-btn" class="primary-btn">+ New Event</button>
+                        </div>
+                    </div>
+
+                    <!-- Add or edit one event -->
+                    <div id="event-panel" hidden>
+                        <h3 id="event-panel-title">New Event</h3>
+
+                        <input type="text" id="event-title" class="event-title-input" placeholder="Event title">
+
+                        <div class="form-row">
+                            <label class="field">
+                                <span>Date</span>
+                                <input type="date" id="event-date">
+                            </label>
+                            <label class="checkbox-field">
+                                <input type="checkbox" id="event-all-day"> All day
+                            </label>
+                        </div>
+
+                        <div class="form-row" id="event-time-row">
+                            <label class="field">
+                                <span>Starts</span>
+                                <input type="time" id="event-start">
+                            </label>
+                            <label class="field">
+                                <span>Ends</span>
+                                <input type="time" id="event-end">
+                            </label>
+                        </div>
+
+                        <label class="field">
+                            <span>Repeats</span>
+                            <select id="event-repeat">
+                                <option value="none">Does not repeat</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
+                        </label>
+
+                        <div id="repeat-options" class="repeat-options" hidden>
+                            <div class="inline-row">
+                                <span>Every</span>
+                                <input type="number" id="repeat-interval" min="1" max="99" value="1">
+                                <span id="repeat-unit">week</span>
+                            </div>
+                            <div id="repeat-weekdays" class="weekday-picker"></div>
+                            <div class="inline-row">
+                                <span>Ends</span>
+                                <select id="repeat-end-type">
+                                    <option value="never">Never</option>
+                                    <option value="on">On date</option>
+                                    <option value="after">After</option>
+                                </select>
+                                <input type="date" id="repeat-until" hidden>
+                                <input type="number" id="repeat-count" min="1" max="999" value="10" hidden>
+                                <span id="repeat-count-label" hidden>times</span>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <span>Color</span>
+                            <div id="event-colors" class="color-picker"></div>
+                        </div>
+
+                        <input type="text" id="event-location" placeholder="Location (optional)">
+                        <textarea id="event-notes" placeholder="Notes (optional)"></textarea>
+
+                        <p id="event-error" class="form-error" hidden></p>
+
+                        <!-- Shown when saving or deleting one occurrence of a repeating event -->
+                        <div id="scope-prompt" class="scope-prompt" hidden>
+                            <p id="scope-question"></p>
+                            <div class="scope-options">
+                                <button data-scope="one">This event</button>
+                                <button data-scope="following">This and following</button>
+                                <button data-scope="all">All events</button>
+                                <button data-scope="cancel">Cancel</button>
+                            </div>
+                        </div>
+
+                        <div id="event-actions" class="modal-actions">
+                            <button id="delete-event-btn" class="danger-link-btn" hidden>Delete</button>
+                            <span class="spacer"></span>
+                            <button id="cancel-event-btn">Cancel</button>
+                            <button id="save-event-btn" class="primary-btn">Save</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="settings-page" class="app-page">
+            <h2>Settings</h2>
+
+            <div class="settings-card">
+                <h3>Appearance</h3>
+                <p class="settings-help">Pick a theme, or let it follow your Mac's light/dark setting.</p>
+                <div class="theme-options">
+                    <button class="theme-btn" data-theme-choice="system">💻 System</button>
+                    <button class="theme-btn" data-theme-choice="light">☀️ Light</button>
+                    <button class="theme-btn" data-theme-choice="dark">🌙 Dark</button>
+                </div>
+            </div>
+
+            <div class="settings-card">
+                <h3>Backup</h3>
+                <p class="settings-help">Your tasks, habits, events and notes are saved only in this browser. Download a backup now and then to keep them safe, or to move them to another browser or computer.</p>
+                <div class="backup-actions">
+                    <button id="export-data-btn">⬇️ Download Backup</button>
+                    <label class="file-btn">⬆️ Restore from Backup
+                        <input type="file" id="import-data-input" accept=".json,application/json" hidden>
+                    </label>
+                </div>
+                <div id="import-confirm" class="import-confirm" hidden>
+                    <p id="import-confirm-message"></p>
+                    <div class="import-confirm-actions">
+                        <button id="import-confirm-btn" class="danger-btn">Replace My Data</button>
+                        <button id="import-cancel-btn">Cancel</button>
+                    </div>
+                </div>
+                <p id="backup-status" class="settings-status"></p>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="undo-toast" class="toast" hidden>
+        <span id="undo-message"></span>
+        <button id="undo-btn">Undo</button>
+    </div>
+
+    <!-- jsPDF builds the "Export as PDF" file in the browser -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js?v=2"></script>
+</body>
+</html>

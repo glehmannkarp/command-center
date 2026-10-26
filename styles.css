@@ -1,0 +1,1673 @@
+/* --- Modern Design Token Variables --- */
+:root {
+    --bg-main: #f8fafc;        /* Soft, clean off-white background */
+    --bg-card: #ffffff;        /* Crisp white for widgets */
+    --sidebar-bg: #0f172a;     /* Deep slate for high contrast navigation */
+    --sidebar-hover: #1e293b;  
+    --text-main: #0f172a;      /* Dark slate for readable text */
+    --text-muted: #64748b;     /* Cool grey for subtext */
+    --primary: #4f46e5;        /* Trendy indigo accent color */
+    --primary-hover: #4338ca;
+    --border-color: #e2e8f0;   /* Subtle borders */
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.02);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+    --radius: 16px;            /* Sleek, rounded corners */
+    --transition: all 0.25s ease;
+    --primary-soft: #eef2ff;   /* Tinted backgrounds for event chips and highlights */
+    --focus-ring: rgba(79, 70, 229, 0.1);
+    --danger: #b91c1c;
+    --priority-low-bg: #dcfce7;
+    --priority-low-text: #166534;
+    --priority-medium-bg: #fef3c7;
+    --priority-medium-text: #92400e;
+    --priority-high-bg: #fee2e2;
+    --priority-high-text: #991b1b;
+    color-scheme: light;
+}
+
+/* --- Dark Theme (set on <html> by the theme switcher) --- */
+:root[data-theme="dark"] {
+    --bg-main: #0b1220;
+    --bg-card: #131c2e;
+    --sidebar-bg: #070b14;
+    --sidebar-hover: #1e293b;
+    --text-main: #e2e8f0;
+    --text-muted: #94a3b8;
+    --primary: #6366f1;
+    --primary-hover: #818cf8;
+    --border-color: #243047;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.4);
+    --primary-soft: rgba(99, 102, 241, 0.18);
+    --focus-ring: rgba(99, 102, 241, 0.3);
+    --danger: #f87171;
+    --priority-low-bg: rgba(34, 197, 94, 0.15);
+    --priority-low-text: #86efac;
+    --priority-medium-bg: rgba(245, 158, 11, 0.15);
+    --priority-medium-text: #fcd34d;
+    --priority-high-bg: rgba(239, 68, 68, 0.15);
+    --priority-high-text: #fca5a5;
+    color-scheme: dark;
+}
+
+/* --- Global Resets & Layout --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* --- Premium Navigation Sidebar --- */
+.sidebar {
+    width: 260px;
+    background-color: var(--sidebar-bg);
+    color: white;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition);
+    z-index: 10;
+    flex-shrink: 0;
+}
+
+.sidebar.collapsed {
+    width: 80px;
+    padding: 24px 16px;
+}
+
+.sidebar.collapsed .nav-links span:last-child {
+    display: none; /* Hide button text when collapsed */
+}
+
+.toggle-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+    margin-bottom: 40px;
+    align-self: flex-start;
+    padding: 8px;
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.toggle-btn:hover {
+    background-color: var(--sidebar-hover);
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.nav-btn {
+    width: 100%;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    text-align: left;
+    padding: 14px 16px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: var(--transition);
+}
+
+.nav-btn.active, .nav-btn:hover {
+    background-color: var(--sidebar-hover);
+    color: white;
+}
+
+.nav-btn.active {
+    background-color: var(--primary);
+}
+
+/* --- Main Content Display --- */
+.content-container {
+    flex-grow: 1;
+    padding: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    min-width: 0;
+}
+
+.app-page {
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
+
+.app-page.active-page {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Typography & Headers --- */
+h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 8px;
+}
+
+/* Clickable name in the dashboard greeting */
+.dashboard-header .user-name,
+.dashboard-header .user-name-input {
+    font: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    background: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    width: auto;
+    cursor: pointer;
+}
+
+/* Looks like the rest of the heading; a faint underline on hover hints it can be edited */
+.dashboard-header .user-name:hover,
+.dashboard-header .user-name:focus-visible {
+    text-decoration: underline;
+    text-decoration-color: var(--border-color);
+    text-underline-offset: 6px;
+    outline: none;
+}
+
+/* Overrides the general text-box look so it stays inline with the greeting */
+.dashboard-header .user-name-input,
+.dashboard-header .user-name-input:focus {
+    cursor: text;
+    border-bottom: 2px solid var(--border-color);
+    box-shadow: none;
+    outline: none;
+}
+
+.dashboard-header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin-bottom: 32px;
+}
+
+h2, h3 {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+}
+
+/* --- Dashboard Dashboard Grid --- */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* minmax stops wide content (the forecast row) stretching a column */
+    gap: 24px;
+}
+
+.widget {
+    background: var(--bg-card);
+    padding: 28px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.widget:hover {
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+}
+
+/* --- Widget Specific Formats --- */
+
+/* Clock */
+.clock-widget {
+    grid-column: span 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white;
+    border: none;
+}
+
+#digital-clock {
+    font-size: 4rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    font-variant-numeric: tabular-nums;
+}
+
+.clock-period {
+    font-size: 0.45em;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+/* Weather UI */
+.weather-widget {
+    display: flex;
+    flex-direction: column;
+}
+
+#weather-icon {
+    font-size: 3.5rem;
+    margin: 12px 0;
+}
+
+#weather-temp {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+#weather-condition {
+    color: var(--text-muted);
+    margin-bottom: 20px;
+}
+
+.weather-options button.active {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.weather-forecast {
+    list-style: none;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    margin-bottom: 16px;
+}
+
+.forecast-item {
+    flex: 0 0 auto;
+    min-width: 64px;
+    padding: 10px 8px;
+    border-radius: 10px;
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-color);
+    text-align: center;
+    font-size: 13px;
+}
+
+.forecast-label {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.forecast-icon {
+    font-size: 1.4rem;
+    margin: 4px 0;
+}
+
+.forecast-temp {
+    font-weight: 600;
+}
+
+.forecast-low {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.weather-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto;
+}
+
+#weather-updated, .note-status {
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+/* Shared Elegant Form Controls */
+button.btn, .weather-options button, .timer-modes button, .timer-controls button, #add-task-btn, .notepad-controls button, .calendar-header button, #refresh-weather-btn {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+button:hover {
+    background-color: var(--border-color);
+}
+
+.weather-options, .timer-modes, .timer-controls, .notepad-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+/* Focus Mode Buttons Accent */
+.timer-modes button.active {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+#timer-display {
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin: 20px 0;
+    color: var(--primary);
+}
+
+/* Text Inputs & Notepad */
+input[type="text"], textarea, select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-main);
+    border-radius: 10px;
+    font-size: 15px;
+    color: var(--text-main);
+    outline: none;
+    transition: var(--transition);
+}
+
+input[type="text"]:focus, textarea:focus, select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+textarea {
+    height: 150px;
+    resize: none;
+    margin-top: 12px;
+    margin-bottom: 16px;
+}
+
+/* --- Task & Habit UI --- */
+.task-input-container {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+#add-task-btn {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    white-space: nowrap;
+}
+
+#add-task-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+#todo-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 32px;
+}
+
+.task-item {
+    background: var(--bg-card);
+    padding: 16px 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow-sm);
+}
+
+.task-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.task-text {
+    flex-grow: 1;
+    margin-left: 16px;
+    font-size: 15px;
+}
+
+.task-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+}
+
+/* --- Task States & Priority Badges --- */
+.task-item.completed .task-text {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+.task-item.completed {
+    opacity: 0.7;
+}
+
+.task-edit-input {
+    flex-grow: 1;
+    margin: 0 12px 0 16px;
+    padding: 6px 10px;
+    font-size: 15px;
+    border: 1px solid var(--primary);
+    border-radius: 8px;
+    outline: none;
+}
+
+.priority-badge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-right: 12px;
+    text-transform: capitalize;
+    white-space: nowrap;
+}
+
+.priority-low {
+    background-color: var(--priority-low-bg);
+    color: var(--priority-low-text);
+}
+
+.priority-medium {
+    background-color: var(--priority-medium-bg);
+    color: var(--priority-medium-text);
+}
+
+.priority-high {
+    background-color: var(--priority-high-bg);
+    color: var(--priority-high-text);
+}
+
+.empty-state {
+    color: var(--text-muted);
+    font-size: 15px;
+    margin-bottom: 32px;
+}
+
+/* Habit Layout Row */
+.habit-tracker-container {
+    background: var(--bg-card);
+    padding: 24px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+}
+
+.habit-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.habit-row:last-child {
+    border: none;
+}
+
+.habit-name {
+    font-weight: 500;
+    width: 150px;
+}
+
+.habit-days {
+    display: flex;
+    gap: 8px;
+}
+
+.day-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-main);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.day-btn.completed {
+    background-color: #10b981; /* Premium Emerald Green */
+    color: white;
+    border-color: #10b981;
+}
+
+.habit-streak {
+    color: var(--text-muted);
+    font-size: 14px;
+    width: 150px;
+    text-align: right;
+}
+
+.habit-input-container {
+    margin-top: 16px;
+    margin-bottom: 8px;
+}
+
+#add-habit-btn {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    white-space: nowrap;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+#add-habit-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.day-btn.today {
+    border: 2px solid var(--primary);
+}
+
+.day-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.habit-delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    margin-left: 8px;
+}
+
+#habit-list + .empty-state {
+    margin: 16px 0 0;
+}
+
+/* --- Calendar Page Styling --- */
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.calendar-header h2 {
+    margin: 0;
+    flex: 1;
+    text-align: center;
+    min-width: 200px;
+}
+
+.calendar-nav, .view-switcher {
+    display: flex;
+    gap: 8px;
+}
+
+.view-switcher button.active {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* Event colors: each sets a tint, a text color and a solid accent */
+.event-color-indigo { --event-bg: #eef2ff; --event-fg: #4338ca; --event-solid: #6366f1; }
+.event-color-sky    { --event-bg: #e0f2fe; --event-fg: #0369a1; --event-solid: #0ea5e9; }
+.event-color-teal   { --event-bg: #ccfbf1; --event-fg: #0f766e; --event-solid: #14b8a6; }
+.event-color-amber  { --event-bg: #fef3c7; --event-fg: #b45309; --event-solid: #f59e0b; }
+.event-color-rose   { --event-bg: #ffe4e6; --event-fg: #be123c; --event-solid: #f43f5e; }
+.event-color-slate  { --event-bg: #e2e8f0; --event-fg: #334155; --event-solid: #64748b; }
+
+:root[data-theme="dark"] .event-color-indigo { --event-bg: rgba(99, 102, 241, 0.22); --event-fg: #a5b4fc; }
+:root[data-theme="dark"] .event-color-sky    { --event-bg: rgba(14, 165, 233, 0.22); --event-fg: #7dd3fc; }
+:root[data-theme="dark"] .event-color-teal   { --event-bg: rgba(20, 184, 166, 0.22); --event-fg: #5eead4; }
+:root[data-theme="dark"] .event-color-amber  { --event-bg: rgba(245, 158, 11, 0.22); --event-fg: #fcd34d; }
+:root[data-theme="dark"] .event-color-rose   { --event-bg: rgba(244, 63, 94, 0.22);  --event-fg: #fda4af; }
+:root[data-theme="dark"] .event-color-slate  { --event-bg: rgba(100, 116, 139, 0.3); --event-fg: #cbd5e1; }
+
+/* Month view */
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr)); /* minmax keeps long event text from widening a column */
+    gap: 10px;
+    width: 100%;
+}
+
+.day-box {
+    position: relative; /* Anchors the "+N" badge */
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    aspect-ratio: 1; /* Every day is a square; extra items are clipped - click a day to see them all */
+    overflow: hidden;
+    padding: 10px;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.day-box:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.day-box.other-month {
+    background: var(--bg-main);
+    box-shadow: none;
+}
+
+.day-box.other-month .day-number,
+.day-box.other-month .day-event {
+    opacity: 0.45;
+}
+
+.day-box.today {
+    border: 2px solid var(--primary);
+}
+
+.day-number {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.day-box.today .day-number {
+    color: var(--primary);
+}
+
+.day-event {
+    background-color: var(--event-bg, var(--primary-soft));
+    color: var(--event-fg, var(--primary));
+    font-size: 12px;
+    line-height: 1.3;
+    padding: 2px 6px;
+    border-radius: 6px;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* "+N" in the top-right corner, so it never gets clipped by the square */
+.day-more {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 1.2;
+    color: var(--text-muted);
+}
+
+/* Tasks on the calendar */
+.day-event.day-task {
+    background-color: var(--priority-low-bg);
+    color: var(--priority-low-text);
+}
+
+.day-event.day-task.completed {
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+/* Day and week views: hourly time grid */
+.timegrid {
+    --hour-height: 48px;
+    --gutter-width: 60px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.timegrid-row {
+    display: grid;
+    grid-template-columns: var(--gutter-width) repeat(var(--day-count), minmax(0, 1fr));
+}
+
+.timegrid-header {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.timegrid-day-heading {
+    background: none;
+    border: none;
+    border-left: 1px solid var(--border-color);
+    padding: 10px 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    text-align: center;
+}
+
+.timegrid-day-heading .heading-number {
+    display: block;
+    font-size: 20px;
+    color: var(--text-main);
+    margin-top: 2px;
+}
+
+.timegrid-day-heading.today,
+.timegrid-day-heading.today .heading-number {
+    color: var(--primary);
+}
+
+.timegrid-allday {
+    border-bottom: 1px solid var(--border-color);
+    min-height: 34px;
+}
+
+.timegrid-gutter-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: right;
+    padding: 8px 8px 0 0;
+}
+
+.timegrid-allday-cell {
+    border-left: 1px solid var(--border-color);
+    padding: 4px;
+    min-width: 0;
+    cursor: pointer;
+}
+
+.timegrid-allday-cell .day-event {
+    cursor: pointer;
+}
+
+.timegrid-scroll {
+    height: min(640px, calc(100vh - 290px));
+    min-height: 320px;
+    overflow-y: auto;
+}
+
+.timegrid-body {
+    position: relative;
+    height: calc(var(--hour-height) * 24);
+}
+
+.timegrid-hours {
+    position: relative;
+}
+
+.timegrid-hour-label {
+    position: absolute;
+    right: 8px;
+    font-size: 11px;
+    color: var(--text-muted);
+    transform: translateY(-50%);
+}
+
+.timegrid-column {
+    position: relative;
+    border-left: 1px solid var(--border-color);
+    /* One faint line per hour */
+    background-image: linear-gradient(to bottom, var(--border-color) 1px, transparent 1px);
+    background-size: 100% var(--hour-height);
+    cursor: pointer;
+}
+
+.view-week .timegrid-column.today {
+    background-color: var(--primary-soft); /* Only needed to pick today out of a week */
+}
+
+.timegrid-event {
+    position: absolute;
+    padding: 4px 6px;
+    border-radius: 6px;
+    background-color: var(--event-bg);
+    color: var(--event-fg);
+    border-left: 3px solid var(--event-solid);
+    font-size: 12px;
+    line-height: 1.3;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 0 0 1px var(--bg-card); /* Separates overlapping events */
+}
+
+.timegrid-event:hover {
+    filter: brightness(0.97);
+}
+
+.timegrid-event-title {
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.timegrid-event-meta {
+    opacity: 0.85;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.timegrid-now-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #ef4444;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.timegrid-now-line::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: -4px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ef4444;
+}
+
+/* --- Modal UI Update --- */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.6); /* Blurred translucent backdrop */
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: var(--bg-card);
+    padding: 28px;
+    border-radius: var(--radius);
+    width: 100%;
+    max-width: 520px;
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    border: 1px solid var(--border-color);
+}
+
+.modal-content h3 {
+    margin-bottom: 16px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.modal-actions .spacer {
+    flex: 1;
+}
+
+.modal-content button {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.modal-content button.primary-btn {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.modal-content button.primary-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.modal-content button.danger-link-btn {
+    background: none;
+    border: none;
+    color: var(--danger);
+    padding: 10px 4px;
+}
+
+/* Day panel list */
+#modal-event-list {
+    list-style: none;
+}
+
+.modal-event {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 15px;
+}
+
+.modal-event.clickable {
+    cursor: pointer;
+    border-radius: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.modal-event.clickable:hover {
+    background-color: var(--bg-main);
+}
+
+.modal-event-main {
+    display: flex;
+    gap: 10px;
+    min-width: 0;
+}
+
+.event-color-dot {
+    flex-shrink: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-top: 6px;
+    background-color: var(--event-solid);
+}
+
+.modal-event-text {
+    min-width: 0;
+}
+
+.modal-event-title {
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+.modal-event-meta {
+    display: block;
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-top: 2px;
+    overflow-wrap: anywhere;
+}
+
+.modal-event-time {
+    flex-shrink: 0;
+    color: var(--text-muted);
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.modal-empty {
+    color: var(--text-muted);
+    font-size: 14px;
+    padding: 4px 0 8px;
+}
+
+.modal-section-heading {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    padding-top: 8px;
+}
+
+.modal-task-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.modal-task-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+}
+
+.modal-task.completed .modal-task-label span {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+.modal-task .priority-badge {
+    margin-right: 0;
+}
+
+/* Event editor */
+#event-panel .event-title-input {
+    font-size: 17px;
+    font-weight: 500;
+    margin-bottom: 16px;
+}
+
+.form-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.form-row .field {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.field {
+    display: block;
+    margin-bottom: 14px;
+}
+
+.field > span {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+#event-panel input[type="date"],
+#event-panel input[type="time"],
+#event-panel input[type="number"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-main);
+    border-radius: 10px;
+    font-size: 15px;
+    color: var(--text-main);
+    outline: none;
+}
+
+#event-panel input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.checkbox-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    padding-bottom: 12px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.repeat-options {
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 14px;
+    margin: -4px 0 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.inline-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 14px;
+}
+
+#event-panel .inline-row input[type="number"] {
+    width: 72px;
+    background-color: var(--bg-card);
+}
+
+#event-panel .inline-row input[type="date"] {
+    width: auto;
+    background-color: var(--bg-card);
+}
+
+.inline-row select {
+    width: auto;
+    padding: 8px 10px;
+    font-size: 14px;
+    background-color: var(--bg-card);
+}
+
+.weekday-picker {
+    display: flex;
+    gap: 6px;
+}
+
+.modal-content .weekday-picker button {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 600;
+    background-color: var(--bg-card);
+}
+
+.modal-content .weekday-picker button.selected {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.color-picker {
+    display: flex;
+    gap: 10px;
+}
+
+.modal-content .color-picker button {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    background-color: var(--event-solid);
+}
+
+.modal-content .color-picker button.selected {
+    box-shadow: 0 0 0 2px var(--bg-card), 0 0 0 4px var(--event-solid);
+}
+
+#event-location {
+    margin-bottom: 12px;
+}
+
+#event-notes {
+    height: 80px;
+    margin-top: 0;
+}
+
+.form-error {
+    color: var(--danger);
+    font-size: 14px;
+    margin-top: 12px;
+}
+
+.scope-prompt {
+    margin-top: 16px;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid var(--primary);
+    background-color: var(--primary-soft);
+}
+
+.scope-prompt p {
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.scope-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* --- Settings Page --- */
+.settings-card {
+    background: var(--bg-card);
+    padding: 24px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+    margin-bottom: 24px;
+    max-width: 720px;
+}
+
+.settings-help {
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.5;
+    margin: -8px 0 16px;
+}
+
+.theme-options, .backup-actions, .import-confirm-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.theme-btn, .backup-actions button, .file-btn, .import-confirm button {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.file-btn:hover {
+    background-color: var(--border-color);
+}
+
+.theme-btn.active {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.import-confirm {
+    margin-top: 16px;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid var(--danger);
+    background-color: var(--priority-high-bg);
+}
+
+.import-confirm p {
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.import-confirm button.danger-btn {
+    background-color: var(--danger);
+    border-color: var(--danger);
+    color: white;
+}
+
+.settings-status {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-top: 12px;
+}
+
+/* --- Undo Toast --- */
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background-color: var(--sidebar-bg);
+    color: white;
+    padding: 12px 12px 12px 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    font-size: 14px;
+    z-index: 200;
+    animation: fadeIn 0.2s ease;
+}
+
+.toast button {
+    background: none;
+    border: none;
+    color: #a5b4fc;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 8px;
+}
+
+.toast button:hover {
+    background-color: var(--sidebar-hover);
+}
+
+/* --- Custom Timer Length --- */
+.timer-custom {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.timer-custom input[type="number"],
+.task-input-container input[type="date"],
+.task-item input[type="date"] {
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-main);
+    border-radius: 10px;
+    font-size: 14px;
+    color: var(--text-main);
+    outline: none;
+}
+
+.timer-custom input[type="number"] {
+    width: 80px;
+}
+
+.timer-custom input:focus,
+.task-input-container input[type="date"]:focus,
+.task-item input[type="date"]:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+#set-custom-timer {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* --- Task Due Dates, Sorting & Editing --- */
+.task-input-container input[type="date"] {
+    flex-shrink: 0;
+    width: 160px;
+    font-size: 15px;
+}
+
+.task-sort-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    margin: -8px 0 12px;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.task-sort-row select {
+    width: auto;
+    padding: 6px 10px;
+    font-size: 14px;
+}
+
+.task-due {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-right: 12px;
+    white-space: nowrap;
+}
+
+.task-due.due-today {
+    color: var(--priority-medium-text);
+    font-weight: 600;
+}
+
+.task-due.overdue {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+.task-item.editing {
+    gap: 10px;
+    border-color: var(--primary);
+}
+
+.task-item.editing .task-edit-input {
+    margin: 0;
+}
+
+.task-item.editing .task-edit-priority {
+    width: auto;
+    padding: 6px 10px;
+    font-size: 14px;
+}
+
+.task-item.editing input[type="date"] {
+    padding: 6px 10px;
+}
+
+/* --- Phones & Narrow Windows --- */
+@media (max-width: 768px) {
+    /* Sidebar becomes a tab bar along the bottom of the screen */
+    .sidebar,
+    .sidebar.collapsed {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+        flex-direction: row;
+    }
+
+    .toggle-btn {
+        display: none;
+    }
+
+    .nav-links {
+        flex-direction: row;
+        width: 100%;
+        gap: 4px;
+    }
+
+    .nav-links li {
+        flex: 1;
+    }
+
+    .nav-btn {
+        flex-direction: column;
+        gap: 2px;
+        padding: 8px 4px;
+        font-size: 11px;
+        text-align: center;
+    }
+
+    .sidebar.collapsed .nav-links span:last-child {
+        display: inline; /* Desktop collapse doesn't apply to the tab bar */
+    }
+
+    .nav-btn span:first-child {
+        font-size: 20px;
+    }
+
+    .content-container {
+        padding: 20px 16px 100px; /* Room above the tab bar */
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.6rem;
+    }
+
+    .dashboard-header p {
+        font-size: 1rem;
+        margin-bottom: 20px;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+    }
+
+    .clock-widget {
+        grid-column: span 1;
+    }
+
+    #digital-clock {
+        font-size: 2.8rem;
+    }
+
+    .widget {
+        padding: 20px;
+    }
+
+    .timer-modes, .notepad-controls {
+        flex-wrap: wrap;
+    }
+
+    .task-input-container {
+        flex-wrap: wrap;
+    }
+
+    #add-task-btn, #add-habit-btn {
+        width: 100%;
+    }
+
+    .task-input-container input[type="date"] {
+        width: 100%;
+    }
+
+    .task-item {
+        flex-wrap: wrap;
+        row-gap: 8px;
+    }
+
+    .task-item.editing .task-edit-input {
+        flex-basis: 100%;
+    }
+
+    .calendar-grid .day-event.day-task {
+        background-color: var(--priority-low-text); /* Green dot in the month grid */
+    }
+
+    .task-item {
+        padding: 12px 14px;
+    }
+
+    .habit-row {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .habit-name {
+        width: auto;
+        flex: 1;
+    }
+
+    .habit-days {
+        order: 3;
+        width: 100%;
+        justify-content: space-between;
+        gap: 4px;
+    }
+
+    .habit-streak {
+        width: auto;
+    }
+
+    /* Calendar: smaller boxes, events shown as dots */
+    .calendar-header h2 {
+        order: -1;
+        flex-basis: 100%;
+        font-size: 1.25rem;
+    }
+
+    .calendar-weekdays, .calendar-grid {
+        gap: 4px;
+    }
+
+    .calendar-weekdays {
+        font-size: 11px;
+    }
+
+    .day-box {
+        padding: 6px;
+        border-radius: 8px;
+    }
+
+    .day-box:hover {
+        transform: none;
+    }
+
+    .day-number {
+        font-size: 12px;
+        margin-bottom: 4px;
+    }
+
+    .calendar-grid .day-event {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        padding: 0;
+        margin: 0 2px 0 0;
+        border-radius: 50%;
+        font-size: 0;
+        background-color: var(--event-solid, var(--primary));
+    }
+
+    .day-more {
+        display: none;
+    }
+
+    .timegrid {
+        --gutter-width: 44px;
+        --hour-height: 44px;
+    }
+
+    .timegrid-day-heading .heading-number {
+        font-size: 16px;
+    }
+
+    .timegrid-event {
+        padding: 2px 4px;
+        font-size: 11px;
+    }
+
+    .view-week .timegrid-event-meta {
+        display: none;
+    }
+
+    .modal-content {
+        margin: 16px;
+        padding: 20px;
+    }
+
+    .form-row {
+        flex-wrap: wrap;
+    }
+
+    .toast {
+        bottom: calc(84px + env(safe-area-inset-bottom));
+        width: calc(100% - 32px);
+        justify-content: space-between;
+    }
+}
+
+/* Elements with their own display value still need to respect the hidden attribute */
+[hidden] {
+    display: none !important;
+}
